@@ -8,7 +8,7 @@ The intersection of AI, machine learning, and healthcare – it's like watching 
 
 **Tools of the Trade**
 
-Python 🐍, SQL 📊, R 📈, Tableau 🎨 – these are my trusty sidekicks in the quest for data-driven greatness. From wrangling messy datasets to crafting mesmerizing visualizations, I wield these tools with the finesse of a seasoned magician (minus the top hat, of course).
+Python 🐍, SQL 📊, R 📈, Tableau 🎨
 
 **📫 How to reach me** https://www.linkedin.com/in/nphaneuf/
 
