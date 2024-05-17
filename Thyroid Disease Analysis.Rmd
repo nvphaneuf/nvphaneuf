@@ -1,0 +1,108 @@
+---
+title: "Analyzing Thyroid Disease Data"
+author: "Nadia Phaneuf"
+date: "2024-05-17"
+output: html_document
+---
+
+# Overview
+The primary goal of this analysis is to explore and uncover insights into the characteristics, treatment outcomes, and progression of thyroid cancer. The script performs detailed statistical analysis and visualizations to answer key questions related to patient demographics, clinical findings, cancer classifications, and treatment responses.
+
+```{r setup, include=TRUE}
+knitr::opts_chunk$set(echo = TRUE)
+
+## Loading required package: ggplot2
+if(!require(ggplot2)){
+install.packages("ggplot2")
+}
+
+## Loading required package: Tidyverse
+if (!requireNamespace("tidyverse", quietly = TRUE)) {
+  install.packages("tidyverse")
+}
+
+## Loading required package: gtsummary
+if (!requireNamespace("gtsummary", quietly = TRUE)) {
+  install.packages("gtsummary")
+}
+```
+
+### Load Dataset
+
+This data set was sourced from UC Irvine Machine Learning Repository.This data set contains 13 clinicopathologic features aiming to predict recurrence of well differentiated thyroid cancer. The data set was collected in duration of 15 years and each patient was followed for at least 10 years.
+
+Borzooei,Shiva and Tarokhian,Aidin. (2023). Differentiated Thyroid Cancer Recurrence. UCI Machine Learning Repository. https://doi.org/10.24432/C5632J.
+
+```{r load dataset}
+thyroid_df = read.csv("~/Desktop/ASU/Portfolio Data/Thyroid_Diff.csv")
+```
+
+## Descriptive Statistics and Patient Demographics
+
+### Analzing By Age and Cancer Stage
+
+A box plot to represent different cancer stages with their respective age groups.
+
+```{r Analzing By Age and Cancer Stage}
+age_by_cancer = ggplot(thyroid_df, aes(x = Stage, y = Age, fill = Stage)) + 
+  geom_boxplot(outlier.colour = "red", outlier.shape = 8, outlier.size = 4) +
+  scale_fill_brewer(palette = "BuPu") +  
+  theme(
+    legend.position = "none",           
+    plot.title = element_text(size = 11) 
+  ) +
+  ggtitle("Age by Cancer Stage")         
+
+age_by_cancer
+
+ggplot(thyroid_df, aes(x = Age)) +
+  geom_histogram(binwidth = 10, fill = "skyblue", color = "black", aes(y = ..density..)) +  
+  labs(x = "Age", y = "Density", title = "Distribution of Ages") +
+  geom_density(color = "black", size = 1) +  
+  theme_minimal()
+```
+
+A large majority of the patients are in Stage 1. A majority of the patients in the dataset fall between ages 30-40. 
+
+## Gender Distribution
+
+Creating a pie chart we can see that females are diagnosed more with thyroid disease than males are.
+
+``` {r Gender Distribution}
+gender_distribution = ggplot(thyroid_df, aes(x="", y=Gender, fill=Gender)) +
+  geom_bar(stat="identity", width=1) +
+  coord_polar("y", start=0) +
+  scale_fill_brewer(palette="BuPu") +
+  theme_void()
+
+gender_distribution
+```
+``` {r Calculating Gender Distrubition}
+# Calculate the total number of patients
+total_patients <- nrow(thyroid_df)
+
+# Calculate the number of females
+female_count <- sum(thyroid_df$Gender == "F")
+
+# Calculate the number of males
+male_count <- sum(thyroid_df$Gender == "M")
+
+# Calculate the percentages
+female_percentage <- (female_count / total_patients) * 100
+male_percentage <- (male_count / total_patients) * 100
+
+# Print the results
+cat("Female Percentage", female_percentage, "%\n")
+cat("Male Percentage", male_percentage, "%\n")
+```
+
+``` {r Smoking History}
+ggplot(thyroid_df, aes(x = Hx.Smoking)) +
+  geom_bar(binwidth = 5, fill = "skyblue") +
+  labs(x = "Smoking History", y = "Count", title = "Smoking History in Patients") +
+  theme_minimal()
+```
+
+From the above graph, we can infer that smoking history does not affect thyroid disease diagnosis.
+
+
